@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Classroom Management System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { background:#111; color:#fff; font-family:Arial, sans-serif; margin:0; padding:0;}
+    
+    /* HEADER STYLE */
+    header {
+      background:#1c1c1c;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:10px 20px;
+      flex-wrap:wrap;
+      border-bottom:3px solid #4CAF50;
+    }
+    header img {
+      height:70px;
+      width:auto;
+      border-radius:10px;
+    }
+    .header-text {
+      text-align:right;
+      flex:1;
+    }
+    .header-text h1 {
+      margin:0;
+      font-size:24px;
+      color:#4CAF50;
+    }
+    .header-text p {
+      margin:0;
+      font-size:14px;
+      color:#ccc;
+    }
+	
+    /* NAVIGATION */
+    nav { background:#333; display:flex; justify-content:center; flex-wrap:wrap;}
+    nav button {
+      background:#444; border:none; padding:10px 20px; margin:5px;
+      color:white; cursor:pointer; border-radius:5px;
+    }
+    nav button.active { background:#4CAF50;}
+
+    section { display:none; padding:20px;}
+    section.active { display:block;}
+    .container { max-width:1000px; margin:auto;}
+
+    input, select, textarea, button {
+      margin:5px 0; padding:8px; border-radius:5px; border:none;
+    }
+    table { width:100%; border-collapse:collapse; margin-top:10px;}
+    table, th, td { border:1px solid #555;}
+    th, td { padding:8px; text-align:center;}
+    th { background:#333; color:#4CAF50;}
+    .btn-danger { background:crimson; color:white;}
+
+    @media (max-width:768px){
+      header { flex-direction:column; text-align:center; }
+      .header-text { text-align:center; margin-top:10px; }
+      header img { height:60px; }
+      nav button { font-size:14px; padding:8px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER WITH IMAGE + TITLE -->
+<header>
+  <img src="C:\Users\hp\OneDrive\Desktop\8 credit Project\Ksu logo.jpg" alt="Kaushalya The Skill University Logo">
+  <div class="header-text">
+    <h1>Smart Classroom Management System</h1>
+    <p>Kaushalya The Skill University | Examination & Learning Portal</p>
+  </div>
+</header>
+<body>
+<nav id="nav">
+  <button data-target="auth" class="active">Login / Register</button>
+  <button data-target="dashboard" style="display:none;">Dashboard</button>
+  <button data-target="students" style="display:none;">Students</button>
+  <button data-target="attendance" style="display:none;">Attendance</button>
+  <button data-target="assignments" style="display:none;">Assignments</button>
+  <button data-target="notes" style="display:none;">Notes</button>
+  <button data-target="exams" style="display:none;">Exams</button>
+  <button data-target="timetable" style="display:none;">Time Table</button>
+  <button data-target="fees" style="display:none;">View Fees</button>
+  <button data-target="hostel" style="display:none;">Hostel</button>
+  <button data-target="hostel" style="display:none;">Library</button>
+  <button data-target="payment" style="display:none;">Pay Fees</button>
+  <button onclick="logout()">🚪 Logout</button>
+</nav>
+
+<div class="container">
+
+  <!-- AUTH SECTION -->
+  <section id="auth" class="active">
+    <h2>Login</h2>
+    <form id="login-form">
+      <input id="login-username" placeholder="Username" required><br>
+      <input id="login-password" type="password" placeholder="Password" required><br>
+      <button type="submit">Login</button>
+    </form>
+    <p>New user? <a href="#" onclick="showRegister()">Register here</a></p>
+
+    <div id="register" style="display:none;">
+      <h2>Register</h2>
+      <form id="register-form">
+        <input id="reg-username" placeholder="Username" required><br>
+        <input id="reg-password" type="password" placeholder="Password" required><br>
+        <select id="reg-role">
+          <option value="student">Student</option>
+          <option value="teacher">Teacher</option>
+        </select><br>
+        <select id="reg-course">
+          <option value="BCA">BCA</option>
+          <option value="MCA">MCA</option>
+        </select><br>
+        <button type="submit">Register</button>
+      </form>
+    </div>
+  </section>
+  <!-- DASHBOARD -->
+  <section id="dashboard">
+    <h2>Dashboard</h2>
+    <p>Welcome, <span id="user-name"></span> (<span id="user-role"></span>)</p>
+    <div id="teacher-actions" style="display:none;">
+      <button onclick="showView('students')">📋 Manage Students</button>
+      <button onclick="showView('attendance')">🗓️ Attendance</button>
+      <button onclick="showView('assignments')">📝 Assignments</button>
+      <button onclick="showView('notes')">📚 Notes</button>
+      <button onclick="showView('exams')">📅 Exams</button>
+      <button onclick="showView('timetable')">🗓️ Time Table</button>
+      <button onclick="showView('fees')">💰 View Fees</button>
+      <button onclick="showView('payment')">💳 Pay Fees</button>
+      <button onclick="showView('library')">📖 Library</button>
+      <button onclick="showView('hostel')">🏫 Hostel Food Menu</button>
+      <button onclick="logout()">🚪 Logout</button>
+    </div>
+    <div id="student-actions" style="display:none;">
+      <button onclick="showView('attendance')">View Attendance</button>
+      <button onclick="showView('assignments')">View Assignments</button>
+      <button onclick="showView('notes')">View Notes</button>
+      <button onclick="showView('exams')">View Exams</button>
+      <button onclick="showView('timetable')">🗓️ View Time Table</button>
+      <button onclick="showView('fees')">💰 View Fees</button>
+      <button onclick="showView('payment')">💳 Pay Fees</button>
+      <button onclick="showView('library')">📖 Library</button>
+      <button onclick="showView('hostel')">🏫 Hostel Food Menu</button>
+      <button onclick="logout()">🚪 Logout</button>
+    </div>
+  </section>
+
+  <!-- LIBRARY SECTION -->
+  <section id="library">
+    <h2>📖 College Library</h2>
+    <p>Welcome to the digital library. Below is the list of available books and issue details.</p>
+
+    <!-- Add Record Form (only for teachers) -->
+    <div id="add-library-form" style="display:none; background:#222; padding:15px; border-radius:10px; margin-bottom:20px;">
+      <h3>➕ Add New Book Issue Record</h3>
+      <form id="library-form">
+        <input id="lib-name" placeholder="Student Name" required><br>
+        <input id="lib-enroll" placeholder="Enrollment No." required><br>
+        <input id="lib-title" placeholder="Book Title" required><br>
+        <input id="lib-issue" type="date" required><br>
+        <input id="lib-expire" type="date" required><br>
+        <button type="submit">Add Record</button>
+      </form>
+    </div>
+
+    <h3>📚 Student Book Issue Details</h3>
+    <table id="library-table">
+      <tr>
+        <th>Student Name</th>
+        <th>Enrollment No.</th>
+        <th>Book Title</th>
+        <th>Issue Date</th>
+        <th>Expire Date</th>
+      </tr>
+    </table>
+
+    <h3 style="margin-top:30px;">📘 Library Book Catalog</h3>
+    <table>
+      <tr>
+        <th>Book ID</th><th>Book Title</th><th>Author</th><th>Category</th><th>Availability</th>
+      </tr>
+      <tr><td>101</td><td>Introduction to C Programming</td><td>E. Balagurusamy</td><td>Programming</td><td>Available</td></tr>
+      <tr><td>102</td><td>Data Structures using C</td><td>Reema Thareja</td><td>Data Structures</td><td>Issued</td></tr>
+      <tr><td>103</td><td>HTML & CSS: Design and Build Websites</td><td>Jon Duckett</td><td>Web Development</td><td>Available</td></tr>
+      <tr><td>104</td><td>Database System Concepts</td><td>Abraham Silberschatz</td><td>Database</td><td>Available</td></tr>
+      <tr><td>105</td><td>Operating System Concepts</td><td>Silberschatz, Galvin</td><td>Operating System</td><td>Issued</td></tr>
+    </table>
+  </section>
+
+  <!-- HOSTEL FOOD MENU -->
+  <section id="hostel">
+    <h2>🏫 Hostel Weekly Food Menu</h2>
+    <p>The hostel food menu is designed to provide a healthy and balanced diet for all students.</p>
+    <table>
+      <tr><th>Day</th><th>Breakfast</th><th>Lunch</th><th>Snacks</th><th>Dinner</th></tr>
+      <tr><td>Monday</td><td>Poha & Tea</td><td>Dal, Jeera Rice, Roti, Mixed Veg</td><td>Samosa & Tea</td><td>Paneer Curry, Roti, Rice</td></tr>
+      <tr><td>Tuesday</td><td>Upma & Milk</td><td>Chole, Rice, Roti</td><td>Biscuits & Tea</td><td>Aloo Matar, Roti, Rice</td></tr>
+      <tr><td>Wednesday</td><td>Idli, Sambar & Coconut Chutney</td><td>Dal Tadka, Rice, Roti, Veg Fry</td><td>Puff & Tea</td><td>Veg Pulao & Curd</td></tr>
+      <tr><td>Thursday</td><td>Paratha & Curd</td><td>Rajma, Rice, Roti</td><td>Bhel & Buttermilk</td><td>Mix Veg, Rice, Roti</td></tr>
+      <tr><td>Friday</td><td>Sandwich & Tea</td><td>Kadhi, Rice, Roti</td><td>Pasta & Buttermilk</td><td>Dal Fry, Jeera Rice, Aloo</td></tr>
+      <tr><td>Saturday</td><td>Dosa, Sambar & Chutney</td><td>Veg Biryani, Raita</td><td>Pakoda & Tea</td><td>Chole Bhature</td></tr>
+      <tr><td>Sunday</td><td>Puri Bhaji</td><td>Special Meal (Paneer, Rice, Sweet)</td><td>Cold Drink & Snacks</td><td>Pulav, Curd, Papad</td></tr>
+    </table>
+  </section>
+
+</div>
+  <!-- ATTENDANCE -->
+  <section id="attendance">
+    <h2>📅 Attendance</h2>
+    <!-- Teacher form -->
+    <form id="att-form" style="display:none;">
+      <input type="date" id="att-date" required>
+      <input id="att-subject" placeholder="Subject" required>
+      <button type="submit">Mark Attendance</button>
+    </form>
+    <div id="att-students"></div>
+    <!-- Attendance table -->
+    <table>
+      <thead>
+        <tr><th>Date</th><th>Subject</th><th>Roll</th><th>Name</th><th>Status</th></tr>
+      </thead>
+      <tbody id="att-body"></tbody>
+    </table>
+  </section>
+
+  <!-- ASSIGNMENTS -->
+  <section id="assignments">
+    <h2>Assignments</h2>
+    <form id="ass-form">
+      <input id="as-title" placeholder="Title" required>
+      <input type="date" id="as-due" required>
+      <input type="file" id="as-file" required>
+      <button type="submit">Add</button>
+    </form>
+    <table>
+      <thead><tr><th>Title</th><th>Due</th><th>File</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody id="as-body"></tbody>
+    </table>
+  </section>
+  
+  <!-- NOTES -->
+  <section id="notes">
+    <h2>Notes</h2>
+    <form id="note-form">
+      <input id="note-title" placeholder="Title" required>
+      <textarea id="note-content" placeholder="Content" required></textarea>
+      <button type="submit">Add</button>
+    </form>
+    <table>
+      <thead><tr><th>Title</th><th>Content</th><th>Actions</th></tr></thead>
+      <tbody id="note-body"></tbody>
+    </table>
+  </section>
+
+  <!-- EXAMS -->
+  <section id="exams">
+    <h2>Exams</h2>
+    <form id="exam-form" style="display:none;">
+      <input id="ex-subject" placeholder="Subject" required>
+      <input type="date" id="ex-date" required>
+      <input type="time" id="ex-time" required>
+      <input id="ex-room" placeholder="Room" required>
+      <button type="submit">Schedule</button>
+    </form>
+    <table>
+      <thead>
+        <tr><th>Subject</th><th>Date</th><th>Time</th><th>Room</th></tr>
+      </thead>
+      <tbody id="exam-body"></tbody>
+    </table>
+  </section>
+  
+  <!-- FEES -->
+  <section id="fees">
+    <h2>💰 Fees Structure</h2>
+    <table>
+      <tr><th>Category</th><th>Amount</th></tr>
+      <tr><td>Bus</td><td>₹20,000 / Year</td></tr>
+      <tr><td>Hostel</td><td>₹70,000 / Year</td></tr>
+      <tr><td>BCA Tuition</td><td>₹20,000 / semester</td></tr>
+      <tr><td>MCA Tuition</td><td>₹40,000 / semester</td></tr>
+    </table>
+    <div id="student-fee" style="margin-top:20px;"></div>
+  </section>
+
+  <!-- PAYMENT -->
+  <section id="payment">
+    <h2>💳 Pay Fees (BCA Sem 3 & 5)</h2>
+    <form id="payment-form">
+      <label>Semester: </label>
+      <select id="sem-select" required>
+        <option value="">Select Semester</option>
+        <option value="3">Sem 3</option>
+        <option value="5">Sem 5</option>
+      </select><br>
+
+      <label>Payment Method: </label>
+      <select id="pay-method" required>
+        <option value="">Select Method</option>
+        <option value="Credit Card">Credit Card</option>
+        <option value="Debit Card">Debit Card</option>
+        <option value="Net Banking">Net Banking</option>
+      </select><br>
+
+      <div id="netbank-options" class="hidden">
+        <label>Net Banking Option:</label>
+        <select id="netbank-select">
+          <option value="GPay">GPay</option>
+          <option value="Paytm">Paytm</option>
+          <option value="PhonePe">PhonePe</option>
+        </select><br>
+      </div>
+
+      <button type="submit">Pay Fees</button>
+    </form>
+    <div id="payment-result" style="margin-top:20px;"></div>
+  </section>
+
+  <!-- TIME TABLE -->
+  <section id="timetable">
+    <h2>🗓️ BCA Student Time Table</h2>
+    <table>
+      <tr>
+        <th>Day</th><th>9:00 - 10:00</th><th>10:00 - 11:00</th><th>11:00 - 12:00</th>
+        <th>1:00 - 2:00</th><th>2:00 - 3:00</th>
+      </tr>
+      <tr><td>Monday</td><td> - </td><td>English</td><td>C</td><td>Cfo</td><td>Ddco</td></tr>
+      <tr><td>Tuesday</td><td>English</td><td>Maths</td><td>Ddco</td><td> - </td><td>Bec</td></tr>
+      <tr><td>Wednesday</td><td>Maths</td><td>C</td><td>- </td><td>Cfo</td><td>Ddco</td></tr>
+      <tr><td>Thursday</td><td>C</td><td> - </td><td>Ddco</td><td>English</td><td>Ddco</td></tr>
+      <tr><td>Friday</td><td>C</td><td>Ddco</td><td>Ddco</td><td> - </td><td> - </td></tr>
+    </table>
+  </section>
+   <!-- LIBRARY SECTION -->
+  <section id="library">
+    <h2>📖 College Library</h2>
+    <p>Welcome to the digital library. Below is the list of available books and issue details.</p>
+
+    <!-- Add Record Form (only for teachers) -->
+    <div id="add-library-form" style="display:none; background:#222; padding:15px; border-radius:10px; margin-bottom:20px;">
+      <h3>➕ Add New Book Issue Record</h3>
+      <form id="library-form">
+        <input id="lib-name" placeholder="Student Name" required><br>
+        <input id="lib-enroll" placeholder="Enrollment No." required><br>
+        <input id="lib-title" placeholder="Book Title" required><br>
+        <input id="lib-issue" type="date" required><br>
+        <input id="lib-expire" type="date" required><br>
+        <button type="submit">Add Record</button>
+      </form>
+    </div>
+    <h3>📚 Student Book Issue Details</h3>
+    <table id="library-table">
+      <tr>
+        <th>Student Name</th>
+        <th>Enrollment No.</th>
+        <th>Book Title</th>
+        <th>Issue Date</th>
+        <th>Expire Date</th>
+      </tr>
+    </table>
+
+    <h3 style="margin-top:30px;">📘 Library Book Catalog</h3>
+    <table>
+      <tr>
+        <th>Book ID</th><th>Book Title</th><th>Author</th><th>Category</th><th>Availability</th>
+      </tr>
+      <tr><td>101</td><td>Introduction to C Programming</td><td>E. Balagurusamy</td><td>Programming</td><td>Available</td></tr>
+      <tr><td>102</td><td>Data Structures using C</td><td>Reema Thareja</td><td>Data Structures</td><td>Issued</td></tr>
+      <tr><td>103</td><td>HTML & CSS: Design and Build Websites</td><td>Jon Duckett</td><td>Web Development</td><td>Available</td></tr>
+      <tr><td>104</td><td>Database System Concepts</td><td>Abraham Silberschatz</td><td>Database</td><td>Available</td></tr>
+      <tr><td>105</td><td>Operating System Concepts</td><td>Silberschatz, Galvin</td><td>Operating System</td><td>Issued</td></tr>
+    </table>
+  </section>
+
+
+
+<script>
+
+  const KEYS={users:"sc_users",current:"sc_current",attendance:"sc_attendance"};
+  const $=s=>document.querySelector(s);
+  function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
+  function load(k){return JSON.parse(localStorage.getItem(k)||"[]")}
+  let users=load(KEYS.users);
+  let current=JSON.parse(localStorage.getItem(KEYS.current)||"null");
+  let attendance=load(KEYS.attendance);
+  let exams = JSON.parse(localStorage.getItem("sc_exams") || "[]");
+
+  function showRegister(){document.getElementById("register").style.display="block"}
+  document.getElementById("register-form").onsubmit=e=>{
+    e.preventDefault();
+    const u=$("#reg-username").value.trim(),p=$("#reg-password").value,r=$("#reg-role").value,c=$("#reg-course").value;
+    if(users.find(x=>x.username===u)) return alert("User exists");
+    users.push({username:u,password:p,role:r,course:c});
+    save(KEYS.users,users);
+    alert("Registered! Now login.");
+  };
+
+  document.getElementById("login-form").onsubmit=e=>{
+    e.preventDefault();
+    const u=$("#login-username").value.trim(),p=$("#login-password").value;
+    const user=users.find(x=>x.username===u&&x.password===p);
+    if(!user) return alert("Invalid login");
+    current=user;localStorage.setItem(KEYS.current,JSON.stringify(user));
+    showDashboard();
+  };
+
+  function showDashboard(){
+    showView("dashboard");
+    $("#user-name").textContent=current.username;$("#user-role").textContent=current.role;
+    if(current.role==="teacher"){$("#teacher-actions").style.display="block";}
+    else{$("#student-actions").style.display="block";}
+    document.querySelectorAll("nav button").forEach(b=>b.style.display="inline-block");
+  }
+
+  function showView(id){
+    document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+    document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+    const btn=[...document.querySelectorAll("nav button")].find(b=>b.dataset.target===id);
+    if(btn) btn.classList.add("active");
+
+    if(id==="attendance"){ 
+      $("#att-form").style.display=current.role==="teacher"?"block":"none";
+      renderAttendance();
+    }
+    if(id==="exams") renderExams();
+  }
+  document.querySelectorAll("nav button").forEach(b=>{b.onclick=()=>showView(b.dataset.target);});
+
+  // --- Attendance ---
+  document.getElementById("att-form").onsubmit=e=>{
+    e.preventDefault();
+    if(current.role!=="teacher") return alert("Only teacher can mark attendance");
+    const date=$("#att-date").value,sub=$("#att-subject").value;
+    let html="<form id='save-att-form'><table><tr><th>Roll</th><th>Name</th><th>Status</th></tr>";
+    users.filter(u=>u.role==="student").forEach(st=>{
+      html+=`<tr><td>${st.roll||"-"}</td><td>${st.username}</td><td><select name="status-${st.username}"><option value="Present">Present</option><option value="Absent">Absent</option></select></td></tr>`;
+    });
+    html+="</table><button type='submit'>Save Attendance</button></form>";
+    $("#att-students").innerHTML=html;
+
+    document.getElementById("save-att-form").onsubmit=ev=>{
+      ev.preventDefault();
+      users.filter(u=>u.role==="student").forEach(st=>{
+        const status=document.querySelector(`[name='status-${st.username}']`).value;
+        attendance.push({date,subject:sub,roll:st.roll||"-",name:st.username,status});
+      });
+      save(KEYS.attendance,attendance);
+      $("#att-students").innerHTML="<p>Attendance saved!</p>";
+      renderAttendance();
+    };
+  };
+  function renderAttendance(){
+    $("#att-body").innerHTML="";
+    let data=(current.role==="teacher")?attendance:attendance.filter(a=>a.name===current.username);
+    data.forEach(a=>{$("#att-body").innerHTML+=`<tr><td>${a.date}</td><td>${a.subject}</td><td>${a.roll}</td><td>${a.name}</td><td>${a.status}</td></tr>`;});
+  }
+
+  // --- Exams ---
+  function renderExams(){
+    $("#exam-body").innerHTML="";
+    exams.forEach(ex=>{$("#exam-body").innerHTML+=`<tr><td>${ex.subject}</td><td>${ex.date}</td><td>${ex.time}</td><td>${ex.room}</td></tr>`;});
+    $("#exam-form").style.display = current.role==="teacher" ? "block" : "none";
+  }
+  document.getElementById("exam-form").onsubmit = e=>{
+    e.preventDefault();
+    if(current.role !== "teacher") return alert("Only teachers can schedule exams!");
+    const subject = $("#ex-subject").value,date = $("#ex-date").value,time = $("#ex-time").value,room = $("#ex-room").value;
+    exams.push({subject,date,time,room});localStorage.setItem("sc_exams", JSON.stringify(exams));
+    renderExams();
+    $("#ex-subject").value=""; $("#ex-date").value=""; $("#ex-time").value=""; $("#ex-room").value="";
+  }
+
+  // --- Payment ---
+  $("#pay-method").onchange=()=>{
+    $("#netbank-options").classList.toggle("hidden", $("#pay-method").value!=="Net Banking");
+  }
+  $("#payment-form").onsubmit=e=>{
+    e.preventDefault();
+    const sem=$("#sem-select").value,pay=$("#pay-method").value,netbank=$("#netbank-select").value;
+    if(!sem || !pay) return alert("Select semester and payment method!");
+    let method = pay==="Net Banking"?`${pay} (${netbank})`:pay;
+    $("#payment-result").innerHTML=`<p>Fees Paid Successfully for Sem ${sem} using ${method} ✅</p>`;
+    $("#payment-form").reset();
+    $("#netbank-options").classList.add("hidden");
+  }
+// --- Library ---
+$("#library-form")?.addEventListener("submit", e=>{
+  e.preventDefault();
+  const name=$("#lib-name").value,enroll=$("#lib-enroll").value,title=$("#lib-title").value,issue=$("#lib-issue").value,expire=$("#lib-expire").value;
+  if(library.some(l=>l.title===title && !l.returned)) return alert("Book already issued!");
+  library.push({name,enroll,title,issue,expire,returned:false});
+  save(KEYS.library,library);renderLibrary();$("#library-form").reset();
+});
+
+function renderLibrary(){
+  const addForm=$("#add-library-form");
+  addForm.style.display=current.role==="teacher"?"block":"none";
+  let html="";
+  let filtered=(current.role==="teacher")?library:library.filter(l=>l.name===current.username);
+  filtered.forEach((l,i)=>{
+    html+=`<tr><td>${l.name}</td><td>${l.enroll}</td><td>${l.title}</td><td>${l.issue}</td>
+           <td>${l.returned?"✅ Returned":l.expire}</td>
+           <td>${current.role==="teacher"?
+            (!l.returned?`<button class='btn-return' onclick='returnBook(${i})'>Return</button> <button class='btn-danger' onclick='deleteBook(${i})'>Delete</button>`:
+            `<button class='btn-danger' onclick='deleteBook(${i})'>Delete</button>`):"-"}</td></tr>`;
+  });
+  $("#library-table").innerHTML="<tr><th>Student</th><th>Enroll No.</th><th>Book Title</th><th>Issue Date</th><th>Expire/Status</th><th>Actions</th></tr>"+html;
+
+  let catHTML="";
+  catalog.forEach(b=>{
+    let issued=library.some(l=>l.title===b.title && !l.returned);
+    catHTML+=`<tr><td>${b.id}</td><td>${b.title}</td><td>${b.author}</td><td>${b.category}</td><td>${issued?"❌ Issued":"✅ Available"}</td></tr>`;
+  });
+  $("#catalog-table").innerHTML="<tr><th>ID</th><th>Title</th><th>Author</th><th>Category</th><th>Status</th></tr>"+catHTML;
+}
+
+$("#library-form").onsubmit=e=>{
+  e.preventDefault();
+  if(current.role!=="teacher")return alert("Only teacher can add record");
+  const name=$("#lib-name").value,enroll=$("#lib-enroll").value,title=$("#lib-title").value,issue=$("#lib-issue").value,expire=$("#lib-expire").value;
+  if(!name||!title)return alert("Fill all fields");
+  library.push({name,enroll,title,issue,expire,returned:false});
+  save(KEYS.library,library);renderLibrary();$("#library-form").reset();
+}
+
+function returnBook(i){library[i].returned=true;save(KEYS.library,library);renderLibrary();}
+function deleteBook(i){library.splice(i,1);save(KEYS.library,library);renderLibrary();}
+
+if(current)showDashboard();
+</script>
+</body>
+</html>

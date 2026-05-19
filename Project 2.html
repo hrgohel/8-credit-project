@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Classroom Management System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { background:#111; color:#fff; font-family:Arial, sans-serif; margin:0; padding:0;}
+    header {background:#1c1c1c;display:flex;align-items:center;justify-content:space-between;padding:10px 20px;flex-wrap:wrap;border-bottom:3px solid #4CAF50;}
+    header img {height:70px;border-radius:10px;}
+    .header-text {text-align:right;flex:1;}
+    .header-text h1 {margin:0;font-size:24px;color:#4CAF50;}
+    .header-text p {margin:0;font-size:14px;color:#ccc;}
+    nav {background:#333;display:flex;justify-content:center;flex-wrap:wrap;}
+    nav button {background:#444;border:none;padding:10px 20px;margin:5px;color:white;cursor:pointer;border-radius:5px;}
+    nav button.active {background:#4CAF50;}
+    section {display:none;padding:20px;}
+    section.active {display:block;}
+    .container {max-width:1000px;margin:auto;}
+    input,select,textarea,button {margin:5px 0;padding:8px;border-radius:5px;border:none;}
+    table {width:100%;border-collapse:collapse;margin-top:10px;}
+    table,th,td {border:1px solid #555;}
+    th,td {padding:8px;text-align:center;}
+    th {background:#333;color:#4CAF50;}
+    .btn-danger {background:crimson;color:white;}
+    .btn-return {background:#2E8B57;color:white;}
+    @media (max-width:768px){
+      header{flex-direction:column;text-align:center;}
+      .header-text{text-align:center;margin-top:10px;}
+      header img{height:60px;}
+      nav button{font-size:14px;padding:8px 12px;}
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="C:\Users\hp\OneDrive\Desktop\8 credit Project\Ksu logo.jpg" alt="KSU Logo">
+  <div class="header-text">
+    <h1>Smart Classroom Management System</h1>
+    <p>Kaushalya The Skill University | Examination & Learning Portal</p>
+  </div>
+</header>
+
+<nav>
+  <button data-target="auth" class="active">Login / Register</button>
+  <button data-target="dashboard" style="display:none;">Dashboard</button>
+  <button data-target="library" style="display:none;">Library</button>
+  <button onclick="logout()">🚪 Logout</button>
+</nav>
+
+<div class="container">
+
+  <!-- AUTH SECTION -->
+  <section id="auth" class="active">
+    <h2>Login</h2>
+    <form id="login-form">
+      <input id="login-username" placeholder="Username" required><br>
+      <input id="login-password" type="password" placeholder="Password" required><br>
+      <button type="submit">Login</button>
+    </form>
+    <p>New user? <a href="#" onclick="showRegister()">Register here</a></p>
+
+    <div id="register" style="display:none;">
+      <h2>Register</h2>
+      <form id="register-form">
+        <input id="reg-username" placeholder="Username" required><br>
+        <input id="reg-password" type="password" placeholder="Password" required><br>
+        <select id="reg-role">
+          <option value="student">Student</option>
+          <option value="teacher">Teacher</option>
+        </select><br>
+        <button type="submit">Register</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- DASHBOARD -->
+  <section id="dashboard">
+    <h2>Dashboard</h2>
+    <p>Welcome, <span id="user-name"></span> (<span id="user-role"></span>)</p>
+    <div id="teacher-actions" style="display:none;">
+      <button onclick="showView('library')">📖 Manage Library</button>
+    </div>
+    <div id="student-actions" style="display:none;">
+      <button onclick="showView('library')">📖 View Library</button>
+    </div>
+  </section>
+
+  <!-- LIBRARY SECTION -->
+  <section id="library">
+    <h2>📚 College Library</h2>
+    <p>Welcome to the digital library. Teachers can manage book issues, students can only view their records.</p>
+
+    <div id="add-library-form" style="display:none; background:#222;padding:15px;border-radius:10px;margin-bottom:20px;">
+      <h3>➕ Add Book Issue Record</h3>
+      <form id="library-form">
+        <input id="lib-name" placeholder="Student Name" required><br>
+        <input id="lib-enroll" placeholder="Enrollment No." required><br>
+        <input id="lib-title" placeholder="Book Title" required><br>
+        <input id="lib-issue" type="date" required><br>
+        <input id="lib-expire" type="date" required><br>
+        <button type="submit">Add Record</button>
+      </form>
+    </div>
+
+    <h3>📕 Issued Book Records</h3>
+    <table id="library-table">
+      <tr><th>Student</th><th>Enroll No.</th><th>Book Title</th><th>Issue Date</th><th>Expire/Status</th><th>Actions</th></tr>
+    </table>
+
+    <h3 style="margin-top:30px;">📘 Library Catalog</h3>
+    <table id="catalog-table">
+      <tr><th>ID</th><th>Title</th><th>Author</th><th>Category</th><th>Status</th></tr>
+    </table>
+  </section>
+</div>
+
+<script>
+const KEYS={users:"sc_users",current:"sc_current",library:"sc_library"};
+const $=s=>document.querySelector(s);
+function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
+function load(k){return JSON.parse(localStorage.getItem(k)||"[]")}
+
+let users=load(KEYS.users);
+let current=JSON.parse(localStorage.getItem(KEYS.current)||"null");
+let library=load(KEYS.library);
+
+const catalog=[
+  {id:101,title:"C Programming",author:"E. Balagurusamy",category:"Programming"},
+  {id:102,title:"Data Structures in C",author:"Reema Thareja",category:"Data Structures"},
+  {id:103,title:"HTML & CSS",author:"Jon Duckett",category:"Web Dev"},
+  {id:104,title:"Database Concepts",author:"Silberschatz",category:"Database"},
+  {id:105,title:"Operating System",author:"Galvin",category:"OS"}
+];
+
+function showRegister(){document.getElementById("register").style.display="block";}
+document.getElementById("register-form").onsubmit=e=>{
+  e.preventDefault();
+  const u=$("#reg-username").value.trim(),p=$("#reg-password").value,r=$("#reg-role").value;
+  if(users.find(x=>x.username===u))return alert("User exists");
+  users.push({username:u,password:p,role:r});save(KEYS.users,users);
+  alert("Registered! Please login.");
+};
+
+document.getElementById("login-form").onsubmit=e=>{
+  e.preventDefault();
+  const u=$("#login-username").value.trim(),p=$("#login-password").value;
+  const user=users.find(x=>x.username===u&&x.password===p);
+  if(!user)return alert("Invalid login");
+  current=user;localStorage.setItem(KEYS.current,JSON.stringify(user));
+  showDashboard();
+};
+
+function logout(){localStorage.removeItem(KEYS.current);location.reload();}
+
+function showDashboard(){
+  showView("dashboard");
+  $("#user-name").textContent=current.username;
+  $("#user-role").textContent=current.role;
+  document.querySelectorAll("nav button").forEach(b=>b.style.display="inline-block");
+  if(current.role==="teacher")$("#teacher-actions").style.display="block";
+  else $("#student-actions").style.display="block";
+}
+
+function showView(id){
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+  const btn=[...document.querySelectorAll("nav button")].find(b=>b.dataset.target===id);
+  if(btn)btn.classList.add("active");
+
+  if(id==="library")renderLibrary();
+}
+
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>showView(b.dataset.target));
+
+function renderLibrary(){
+  const addForm=$("#add-library-form");
+  addForm.style.display=current.role==="teacher"?"block":"none";
+  let html="";
+  let filtered=(current.role==="teacher")?library:library.filter(l=>l.name===current.username);
+  filtered.forEach((l,i)=>{
+    html+=`<tr><td>${l.name}</td><td>${l.enroll}</td><td>${l.title}</td><td>${l.issue}</td>
+           <td>${l.returned?"✅ Returned":l.expire}</td>
+           <td>${current.role==="teacher"?
+            (!l.returned?`<button class='btn-return' onclick='returnBook(${i})'>Return</button> <button class='btn-danger' onclick='deleteBook(${i})'>Delete</button>`:
+            `<button class='btn-danger' onclick='deleteBook(${i})'>Delete</button>`):"-"}</td></tr>`;
+  });
+  $("#library-table").innerHTML="<tr><th>Student</th><th>Enroll No.</th><th>Book Title</th><th>Issue Date</th><th>Expire/Status</th><th>Actions</th></tr>"+html;
+
+  let catHTML="";
+  catalog.forEach(b=>{
+    let issued=library.some(l=>l.title===b.title && !l.returned);
+    catHTML+=`<tr><td>${b.id}</td><td>${b.title}</td><td>${b.author}</td><td>${b.category}</td><td>${issued?"❌ Issued":"✅ Available"}</td></tr>`;
+  });
+  $("#catalog-table").innerHTML="<tr><th>ID</th><th>Title</th><th>Author</th><th>Category</th><th>Status</th></tr>"+catHTML;
+}
+
+$("#library-form").onsubmit=e=>{
+  e.preventDefault();
+  if(current.role!=="teacher")return alert("Only teacher can add record");
+  const name=$("#lib-name").value,enroll=$("#lib-enroll").value,title=$("#lib-title").value,issue=$("#lib-issue").value,expire=$("#lib-expire").value;
+  if(!name||!title)return alert("Fill all fields");
+  library.push({name,enroll,title,issue,expire,returned:false});
+  save(KEYS.library,library);renderLibrary();$("#library-form").reset();
+}
+
+function returnBook(i){library[i].returned=true;save(KEYS.library,library);renderLibrary();}
+function deleteBook(i){library.splice(i,1);save(KEYS.library,library);renderLibrary();}
+
+if(current)showDashboard();
+</script>
+</body>
+</html>

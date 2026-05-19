@@ -1,0 +1,91 @@
+<!-- FILE: dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Classroom Dashboard</title>
+
+    <style>
+        body { font-family: Arial; background: #f0f0f0; margin: 0; }
+        .nav { background: #2c3e50; padding: 15px; color: white; }
+        .nav a { color: #fff; margin-right: 20px; text-decoration: none; }
+        .container { padding: 20px; }
+        section { display: none; background: #fff; padding: 20px;
+            border-radius: 8px; box-shadow: 0 0 10px #aaa; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ccc; padding: 8px; }
+    </style>
+
+</head>
+<body>
+
+<div class="nav">
+    <a href="Home.html">Home</a>
+    <a href="Attendance.html">Attendance</a>
+    <a href="Assignment.html">Assignments</a>
+	<a href="Timetablehtml">Timetable</a>
+	<a href="Hostle.html">Hostle</a>
+	<a href="Pay Fees.html">Pay Fees</a>
+	<a href="View Fees.html">View Fees</a>
+	<a href="Library.html">Library</a>
+    <a href="Notes.html">Notes</a>
+    <a href="Exam.html">Exams</a>
+    <a href="Logout.html">Logout</a>
+</div>
+
+<div class="container">
+
+    <!-- Home Section -->
+    <section id="home">
+        <h2>Welcome to Smart Classroom Dashboard</h2>
+        <p>Use the menu to navigate.</p>
+    </section>
+
+    <!-- Attendance Section -->
+    <section id="attendance">
+        <h2>Attendance</h2>
+        <table>
+            <tr><th>Date</th><th>Status</th></tr>
+            <tbody id="att-body"></tbody>
+        </table>
+    </section>
+
+    <!-- Assignments Section -->
+    <section id="assignments">
+        <h2>Assignments</h2>
+        <table>
+            <tr><th>Title</th><th>Deadline</th></tr>
+            <tbody id="assign-body"></tbody>
+        </table>
+    </section>
+
+    <!-- Notes Section -->
+    <section id="notes">
+        <h2>Notes</h2>
+        <div id="notes-list"></div>
+    </section>
+
+    <!-- Exams Section -->
+    <section id="exams">
+        <h2>Exams</h2>
+
+        <form id="exam-form">
+            <input id="ex-subject" placeholder="Subject"><br>
+            <input id="ex-date" type="date"><br>
+            <input id="ex-time" type="time"><br>
+            <input id="ex-room" placeholder="Room"><br>
+            <button type="submit">Add Exam</button>
+        </form>
+
+        <table>
+            <tr><th>Subject</th><th>Date</th><th>Time</th><th>Room</th></tr>
+            <tbody id="exam-body"></tbody>
+        </table>
+    </section>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>

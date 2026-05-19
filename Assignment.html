@@ -1,0 +1,137 @@
+<!-- File: Assenment.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assignments</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+        }
+        button {
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table, th, td {
+            border: 1px solid #444;
+        }
+        th, td {
+            padding: 10px;
+        }
+        th {
+            background: #f0f0f0;
+        }
+        tr:nth-child(even) {
+            background: #fafafa;
+        }
+        .delete-btn {
+            background: red;
+            color: white;
+            padding: 6px 10px;
+            border: none;
+            cursor: pointer;
+        }
+        .submitted {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<section id="assignments">
+    <h2>Assignments</h2>
+
+    <form id="ass-form">
+        <input id="as-title" placeholder="Title" required>
+        <input type="date" id="as-due" required>
+        <input type="file" id="as-file" required>
+        <button type="submit">Add</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Due</th>
+                <th>File</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="as-body"></tbody>
+    </table>
+</section>
+
+<script>
+    const form = document.getElementById("ass-form");
+    const body = document.getElementById("as-body");
+
+    let assignments = JSON.parse(localStorage.getItem("assignments_list")) || [];
+
+    function renderAssignments() {
+        body.innerHTML = "";
+        assignments.forEach((a, index) => {
+            body.innerHTML += `
+                <tr>
+                    <td>${a.title}</td>
+                    <td>${a.due}</td>
+                    <td><a href="${a.file}" download>Download</a></td>
+                    <td class="submitted">Submitted</td>
+                    <td><button class="delete-btn" onclick="deleteAss(${index})">Delete</button></td>
+                </tr>
+            `;
+        });
+    }
+
+    form.onsubmit = function(e) {
+        e.preventDefault();
+        
+        const title = document.getElementById("as-title").value;
+        const due = document.getElementById("as-due").value;
+        const fileInput = document.getElementById("as-file");
+
+        const fileURL = URL.createObjectURL(fileInput.files[0]);
+
+        assignments.push({
+            title,
+            due,
+            file: fileURL
+        });
+
+        localStorage.setItem("assignments_list", JSON.stringify(assignments));
+
+        form.reset();
+        renderAssignments();
+    };
+
+    function deleteAss(index) {
+        assignments.splice(index, 1);
+        localStorage.setItem("assignments_list", JSON.stringify(assignments));
+        renderAssignments();
+    }
+
+    renderAssignments();
+</script>
+
+</body>
+</html>

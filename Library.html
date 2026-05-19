@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Library</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #111;
+      color: white;
+      padding: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #444;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background: #222;
+    }
+    input, button {
+      padding: 8px;
+      margin: 5px 0;
+      width: 100%;
+      border: none;
+      border-radius: 5px;
+    }
+    button {
+      background: #28a745;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #218838;
+    }
+  </style>
+</head>
+<body>
+
+<section id="library">
+    <h2>📖 College Library</h2>
+    <p>Welcome to the digital library. Below is the list of available books and issue details.</p>
+
+    <!-- Add Record Form (only for teachers) -->
+    <div id="add-library-form" style="display:none; background:#222; padding:15px; border-radius:10px; margin-bottom:20px;">
+      <h3>➕ Add New Book Issue Record</h3>
+      <form id="library-form">
+        <input id="lib-name" placeholder="Student Name" required><br>
+        <input id="lib-enroll" placeholder="Enrollment No." required><br>
+        <input id="lib-title" placeholder="Book Title" required><br>
+        <input id="lib-issue" type="date" required><br>
+        <input id="lib-expire" type="date" required><br>
+        <button type="submit">Add Record</button>
+      </form>
+    </div>
+
+    <h3>📚 Student Book Issue Details</h3>
+    <table id="library-table">
+      <tr>
+        <th>Student Name</th>
+        <th>Enrollment No.</th>
+        <th>Book Title</th>
+        <th>Issue Date</th>
+        <th>Expire Date</th>
+      </tr>
+    </table>
+
+    <h3 style="margin-top:30px;">📘 Library Book Catalog</h3>
+    <table>
+      <tr>
+        <th>Book ID</th><th>Book Title</th><th>Author</th><th>Category</th><th>Availability</th>
+      </tr>
+      <tr><td>101</td><td>Introduction to C Programming</td><td>E. Balagurusamy</td><td>Programming</td><td>Available</td></tr>
+      <tr><td>102</td><td>Data Structures using C</td><td>Reema Thareja</td><td>Data Structures</td><td>Issued</td></tr>
+      <tr><td>103</td><td>HTML & CSS: Design and Build Websites</td><td>Jon Duckett</td><td>Web Development</td><td>Available</td></tr>
+      <tr><td>104</td><td>Database System Concepts</td><td>Abraham Silberschatz</td><td>Database</td><td>Available</td></tr>
+      <tr><td>105</td><td>Operating System Concepts</td><td>Silberschatz, Galvin</td><td>Operating System</td><td>Issued</td></tr>
+    </table>
+</section>
+
+</body>
+</html>

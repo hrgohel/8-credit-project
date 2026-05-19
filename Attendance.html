@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Attendance</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      padding: 20px;
+    }
+    input, button {
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 5px;
+      border: none;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #444;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background: #222;
+    }
+    form {
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<section id="attendance">
+    <h2>📅 Attendance</h2>
+    <!-- Teacher form -->
+    <form id="att-form" style="display:none;">
+      <input type="date" id="att-date" required>
+      <input id="att-subject" placeholder="Subject" required>
+      <button type="submit">Mark Attendance</button>
+    </form>
+    <div id="att-students"></div>
+    <!-- Attendance table -->
+    <table>
+      <thead>
+        <tr><th>Date</th><th>Subject</th><th>Roll</th><th>Name</th><th>Status</th></tr>
+      </thead>
+      <tbody id="att-body"></tbody>
+    </table>
+</section>
+
+</body>
+</html>

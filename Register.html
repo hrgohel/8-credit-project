@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register</title>
+  <style>
+    body {
+      background: #111;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .box {
+      background: #222;
+      padding: 25px;
+      border-radius: 12px;
+      width: 340px;
+      text-align: center;
+    }
+    h2 { color: #4CAF50; }
+    input, select {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 8px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover { background: #45a049; }
+    a { color: #f44336; display: block; margin-top: 12px; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>🆕 New Registration</h2>
+    <input type="text" id="name" placeholder="Enter Name" required>
+    <input type="password" id="password" placeholder="Enter Password" required>
+    <input type="text" id="contact" placeholder="Enter Contact">
+    <input type="text" id="address" placeholder="Enter Address">
+    <select id="role">
+      <option value="student">Student</option>
+      <option value="teacher">Teacher</option>
+    </select>
+    <button onclick="register()">Register</button>
+    <a href="login.html">⬅ Back to Login</a>
+  </div>
+
+  <script>
+    function register() {
+      let user = {
+        name: document.getElementById("name").value,
+        password: document.getElementById("password").value,
+        contact: document.getElementById("contact").value,
+        address: document.getElementById("address").value,
+        role: document.getElementById("role").value
+      };
+
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+      users.push(user);
+      localStorage.setItem("users", JSON.stringify(users));
+
+      alert("Registration Successful!");
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>

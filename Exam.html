@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Exams</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      padding: 20px;
+    }
+    input, button {
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      border: 1px solid #555;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background: #333;
+      color: #4CAF50;
+    }
+  </style>
+</head>
+<body>
+
+<!-- EXAMS -->
+<section id="exams">
+    <h2>Exams</h2>
+    <form id="exam-form" style="display:none;">
+      <input id="ex-subject" placeholder="Subject" required>
+      <input type="date" id="ex-date" required>
+      <input type="time" id="ex-time" required>
+      <input id="ex-room" placeholder="Room" required>
+      <button type="submit">Schedule</button>
+    </form>
+    
+    <table>
+      <thead>
+        <tr><th>Subject</th><th>Date</th><th>Time</th><th>Room</th></tr>
+      </thead>
+      <tbody id="exam-body"></tbody>
+    </table>
+</section>
+
+</body>
+</html>

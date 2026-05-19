@@ -1,0 +1,116 @@
+<!-- File: Notes.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Notes</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+        }
+        button {
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table, th, td {
+            border: 1px solid #444;
+        }
+        th, td {
+            padding: 10px;
+        }
+        th {
+            background: #f0f0f0;
+        }
+        tr:nth-child(even) {
+            background: #fafafa;
+        }
+        .delete-btn {
+            background: red;
+            color: white;
+            padding: 6px 10px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<section id="notes">
+    <h2>Notes</h2>
+
+    <form id="note-form">
+        <input id="note-title" placeholder="Title" required>
+        <textarea id="note-content" placeholder="Content" required></textarea>
+        <button type="submit">Add</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Content</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="note-body"></tbody>
+    </table>
+</section>
+
+<script>
+    const noteForm = document.getElementById("note-form");
+    const noteBody = document.getElementById("note-body");
+    let notes = JSON.parse(localStorage.getItem("notes_list")) || [];
+
+    function renderNotes() {
+        noteBody.innerHTML = "";
+        notes.forEach((note, index) => {
+            noteBody.innerHTML += `
+                <tr>
+                    <td>${note.title}</td>
+                    <td>${note.content}</td>
+                    <td><button class="delete-btn" onclick="deleteNote(${index})">Delete</button></td>
+                </tr>`;
+        });
+    }
+
+    noteForm.onsubmit = function (e) {
+        e.preventDefault();
+        const title = document.getElementById("note-title").value;
+        const content = document.getElementById("note-content").value;
+
+        notes.push({ title, content });
+        localStorage.setItem("notes_list", JSON.stringify(notes));
+
+        noteForm.reset();
+        renderNotes();
+    };
+
+    function deleteNote(index) {
+        notes.splice(index, 1);
+        localStorage.setItem("notes_list", JSON.stringify(notes));
+        renderNotes();
+    }
+
+    renderNotes();
+</script>
+
+</body>
+</html>

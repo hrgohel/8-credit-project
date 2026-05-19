@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pay Fees</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      padding: 20px;
+    }
+    input, select, button {
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<!-- PAYMENT -->
+<section id="payment">
+    <h2>💳 Pay Fees (BCA Sem 3 & 5)</h2>
+    <form id="payment-form">
+      <label>Semester: </label>
+      <select id="sem-select" required>
+        <option value="">Select Semester</option>
+        <option value="3">Sem 3</option>
+        <option value="5">Sem 5</option>
+      </select><br>
+
+      <label>Payment Method: </label>
+      <select id="pay-method" required>
+        <option value="">Select Method</option>
+        <option value="Credit Card">Credit Card</option>
+        <option value="Debit Card">Debit Card</option>
+        <option value="Net Banking">Net Banking</option>
+      </select><br>
+
+      <div id="netbank-options" class="hidden">
+        <label>Net Banking Option:</label>
+        <select id="netbank-select">
+          <option value="GPay">GPay</option>
+          <option value="Paytm">Paytm</option>
+          <option value="PhonePe">PhonePe</option>
+        </select><br>
+      </div>
+
+      <button type="submit">Pay Fees</button>
+    </form>
+    <div id="payment-result" style="margin-top:20px;"></div>
+</section>
+
+<script>
+  const payMethod = document.getElementById("pay-method");
+  const netbankOptions = document.getElementById("netbank-options");
+  const paymentForm = document.getElementById("payment-form");
+  const paymentResult = document.getElementById("payment-result");
+
+  payMethod.addEventListener("change", () => {
+    netbankOptions.classList.toggle("hidden", payMethod.value !== "Net Banking");
+  });
+
+  paymentForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const sem = document.getElementById("sem-select").value;
+    const method = payMethod.value;
+    const netbank = document.getElementById("netbank-select").value;
+
+    if (!sem || !method) return alert("Select semester and payment method!");
+    const displayMethod = method === "Net Banking" ? `${method} (${netbank})` : method;
+    paymentResult.innerHTML = `<p>Fees Paid Successfully for Sem ${sem} using ${displayMethod} ✅</p>`;
+    paymentForm.reset();
+    netbankOptions.classList.add("hidden");
+  });
+</script>
+
+</body>
+</html>

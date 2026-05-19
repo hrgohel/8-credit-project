@@ -48,34 +48,48 @@
   <div class="login-box">
     <h2>Login</h2>
     <input type="text" id="name" placeholder="Enter your name" required>
-    <input type="text" id="contact" placeholder="Enter contact" required>
-    <input type="text" id="address" placeholder="Enter address" required>
-    <select id="role">
-      <option value="student">Student</option>
-      <option value="teacher">Teacher</option>
-    </select>
+    <input type="password" id="password" placeholder="Enter password" required>
     <button onclick="login()">Login</button>
+    <br>
+    <a href="Register.html" style="color: #4CAF50; text-decoration: none; display: inline-block; margin-top: 15px;">Don't have an account? Register here</a>
   </div>
 
   <script>
-    function login(){
-      let user = {
-        name: document.getElementById("name").value,
-        contact: document.getElementById("contact").value,
-        address: document.getElementById("address").value,
-        role: document.getElementById("role").value
-      };
+    async function login(){
+      let name = document.getElementById("name").value;
+      let password = document.getElementById("password").value;
 
-      if(user.name === "" || user.contact === "" || user.address === ""){
-        alert("Please fill all fields!");
+      if(name === "" || password === ""){
+        alert("Please enter both Name and Password!");
         return;
       }
 
-      // Save to localStorage
-      localStorage.setItem("loggedInUser", JSON.stringify(user));
+      try {
+        let response = await fetch("http://localhost:5000/api/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ name, password })
+        });
 
-      // Redirect to dashboard
-      window.location.href = "dashboard.html";
+        let data = await response.json();
+
+        if (data.success) {
+          // Save to localStorage for frontend state (e.g. name, role)
+          // We map 'KEYS.current' as seen in other files or just "loggedInUser"
+          localStorage.setItem("loggedInUser", JSON.stringify(data.user));
+          localStorage.setItem("current", JSON.stringify(data.user)); // Some pages use "current"
+
+          // Redirect to dashboard
+          window.location.href = "dashboard.html"; // Make sure to redirect to correct page, could be index.html or Final Project.html depending on setup
+        } else {
+          alert("Login Failed: " + data.message);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Failed to connect to the server. Is the backend running?");
+      }
     }
   </script>
 </body>

@@ -57,7 +57,7 @@
   </div>
 
   <script>
-    function register() {
+    async function register() {
       let user = {
         name: document.getElementById("name").value,
         password: document.getElementById("password").value,
@@ -66,12 +66,32 @@
         role: document.getElementById("role").value
       };
 
-      let users = JSON.parse(localStorage.getItem("users")) || [];
-      users.push(user);
-      localStorage.setItem("users", JSON.stringify(users));
+      if (!user.name || !user.password) {
+        alert("Name and Password are required!");
+        return;
+      }
 
-      alert("Registration Successful!");
-      window.location.href = "login.html";
+      try {
+        let response = await fetch("http://localhost:5000/api/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(user)
+        });
+
+        let data = await response.json();
+
+        if (data.success) {
+          alert("Registration Successful!");
+          window.location.href = "login.html";
+        } else {
+          alert("Registration Failed: " + data.message);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Failed to connect to the server. Is the backend running?");
+      }
     }
   </script>
 </body>
